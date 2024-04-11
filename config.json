@@ -1,0 +1,9 @@
+{
+  "api_url": "https://www.fema.gov/api/open/v1/NfipMultipleLossProperties",
+  "all_records_param": "$allrecords",
+  "data_key": "NfipMultipleLossProperties",
+  "display_settings": {
+    "graph_button_style": {"display": "block"},
+    "graph_hidden_style": {"display": "none"}
+  }
+}
