@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import plotly.express as px
 
-# Define data dictionary
+# Convert the data dictionary to a list of options for the dropdown
 data_dictionary = {
     'psCountyCode': {'description': 'FIPS County Code', 'required': True, 'type': 'text'},
     'state': {'description': 'State', 'required': True, 'type': 'text'},
@@ -34,15 +34,16 @@ data_dictionary = {
     'id': {'description': 'ID', 'required': True, 'type': 'uuid'}
 }
 
-# Convert the data dictionary to a list of options for the dropdown
 column_options = [{'label': v['description'], 'value': k} for k, v in data_dictionary.items()]
 
-# Streamlit app layout
 st.title("Search NFIP Multiple Loss Properties")
-zip_code = st.text_input('Enter zip code')
-selected_columns = st.multiselect('Select columns to display', options=column_options)
 
-if st.button('Search'):
+zip_code = st.text_input("Enter zip code:")
+selected_columns = st.multiselect("Select columns to display:", options=column_options)
+
+search_button_clicked = st.button("Search")
+
+if search_button_clicked:
     if zip_code and selected_columns:
         params = {'zipCode': zip_code}
         data = get_fema_data(params)
@@ -54,6 +55,7 @@ if st.button('Search'):
             st.write("No results found for the specified zip code.")
     else:
         st.write("Please enter a zip code and select at least one column.")
+
 
 def get_fema_data(parameters={}):
     base_url = 'https://www.fema.gov/api/open/v1/NfipMultipleLossProperties'
@@ -69,4 +71,3 @@ def get_fema_data(parameters={}):
     except ValueError as e:
         st.error(f"Error parsing JSON response: {e}")
         return []
-
