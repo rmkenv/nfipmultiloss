@@ -3,21 +3,6 @@ import pandas as pd
 import requests
 import plotly.express as px
 import stripe
-import toml
-import os
-
-# Load configuration from TOML file
-config = toml.load("config.toml")
-
-# Load secrets from environment variables
-stripe_api_key = os.environ.get("stripe_api_key", "")
-stripe_api_key_test = os.environ.get("stripe_api_key_test", "")
-stripe_link = os.environ.get("stripe_link", "")
-stripe_link_test = os.environ.get("stripe_link_test", "")
-client_id = os.environ.get("client_id", "")
-client_secret = os.environ.get("client_secret", "")
-redirect_url_test = os.environ.get("redirect_url_test", "")
-redirect_url = os.environ.get("redirect_url", "")
 
 # Set the page configuration
 st.set_page_config(layout="wide")
@@ -26,35 +11,30 @@ st.set_page_config(layout="wide")
 st.title("🎈 Integrated Streamlit App 🎈")
 
 # Initialize Stripe
-payment_provider = config.get("payment_provider", "")
+stripe.api_key = "your_stripe_api_key"  # Replace with your Stripe API key
 
-if payment_provider.lower() == "stripe":
-    if config.get("testing_mode", False):
-        stripe.api_key = stripe_api_key_test
-        stripe_oauth_url = stripe_link_test
-    else:
-        stripe.api_key = stripe_api_key
-        stripe_oauth_url = stripe_link
+# Stripe OAuth URL
+stripe_oauth_url = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=your_stripe_client_id&scope=read_write&redirect_uri=https://yourdomain.com/stripe_callback"
 
-    # Button to initiate Stripe authentication
-    if st.button("Login with Stripe"):
-        st.markdown(f"[Click here to login with Stripe]({stripe_oauth_url})")
+# Button to initiate Stripe authentication
+if st.button("Login with Stripe"):
+    st.markdown(f"[Click here to login with Stripe]({stripe_oauth_url})")
 
-    # Handle Stripe callback
-    if st.url_contains("/stripe_callback"):
-        # Extract authorization code from URL
-        authorization_code = st.url_query_params["code"]
+# Handle Stripe callback
+if st.url_contains("/stripe_callback"):
+    # Extract authorization code from URL
+    authorization_code = st.url_query_params["code"]
 
-        # Exchange authorization code for access token
-        response = stripe.OAuth.token(grant_type="authorization_code", code=authorization_code)
+    # Exchange authorization code for access token
+    response = stripe.OAuth.token(grant_type="authorization_code", code=authorization_code)
 
-        # Use access token to fetch user information
-        access_token = response["access_token"]
-        user_info = stripe.Account.retrieve(access_token)
+    # Use access token to fetch user information
+    access_token = response["access_token"]
+    user_info = stripe.Account.retrieve(access_token)
 
-        # Display user information
-        st.write("Logged in user:")
-        st.write(user_info)
+    # Display user information
+    st.write("Logged in user:")
+    st.write(user_info)
 
 # Divider
 st.markdown("---")
