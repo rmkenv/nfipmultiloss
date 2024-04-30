@@ -4,9 +4,18 @@ import requests
 import plotly.express as px
 import stripe
 import toml
+import os
 
-# Load configuration from TOML file
-config = toml.load("config.toml")
+
+# Load secrets from environment variables
+st.secrets["stripe_api_key"] = os.environ.get("stripe_api_key", "")
+st.secrets["stripe_api_key_test"] = os.environ.get("stripe_api_key_test", "")
+st.secrets["stripe_link"] = os.environ.get("stripe_link", "")
+st.secrets["stripe_link_test"] = os.environ.get("stripe_link_test", "")
+st.secrets["client_id"] = os.environ.get("client_id", "")
+st.secrets["client_secret"] = os.environ.get("client_secret", "")
+st.secrets["redirect_url"] = os.environ.get("redirect_url", "")
+st.secrets["redirect_url_test"] = os.environ.get("redirect_url_test", "")
 
 # Set the page configuration
 st.set_page_config(layout="wide")
@@ -16,14 +25,14 @@ st.title("🎈 Integrated Streamlit App 🎈")
 
 # Initialize Stripe
 payment_provider = config.get("payment_provider", "")
-stripe_api_key = config.get("stripe_api_key", "")
-stripe_api_key_test = config.get("stripe_api_key_test", "")
-stripe_link = config.get("stripe_link", "")
-stripe_link_test = config.get("stripe_link_test", "")
-client_id = config.get("client_id", "")
-client_secret = config.get("client_secret", "")
-redirect_url_test = config.get("redirect_url_test", "")
-redirect_url = config.get("redirect_url", "")
+stripe_api_key = st.secrets.get("stripe_api_key", "")
+stripe_api_key_test = st.secrets.get("stripe_api_key_test", "")
+stripe_link = st.secrets.get("stripe_link", "")
+stripe_link_test = st.secrets.get("stripe_link_test", "")
+client_id = st.secrets.get("client_id", "")
+client_secret = st.secrets.get("client_secret", "")
+redirect_url_test = st.secrets.get("redirect_url_test", "")
+redirect_url = st.secrets.get("redirect_url", "")
 
 if payment_provider.lower() == "stripe":
     if config.get("testing_mode", False):
