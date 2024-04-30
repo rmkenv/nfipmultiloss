@@ -11,10 +11,10 @@ st.set_page_config(layout="wide")
 st.title("🎈 Integrated Streamlit App 🎈")
 
 # Initialize Stripe
-stripe.api_key = "your_stripe_api_key"  # Replace with your Stripe API key
+stripe.api_key = "stripe_api_key"  # Replace with your Stripe API key
 
 # Stripe OAuth URL
-stripe_oauth_url = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=your_stripe_client_id&scope=read_write&redirect_uri=https://yourdomain.com/stripe_callback"
+stripe_oauth_url = "stripe_link"
 
 # Button to initiate Stripe authentication
 if st.button("Login with Stripe"):
