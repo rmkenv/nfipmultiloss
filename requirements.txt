@@ -1,4 +1,9 @@
-streamlit==1.7.0
-pandas==1.4.0
-plotly==5.5.0
-requests==2.26.0
+streamlit
+st_paywall
+pandas
+requests
+plotly
+stripe
+httpx-oauth
+pyjwt
+mkdocs
