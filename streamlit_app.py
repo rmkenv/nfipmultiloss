@@ -3,40 +3,22 @@ import pandas as pd
 import requests
 import plotly.express as px
 import stripe
+import toml
 
+# Load configuration from secrets TOML file
+secrets_config = toml.load("secrets.toml")
 
+# Retrieve the Stripe API key from the secrets configuration
+stripe_api_key = secrets_config.get("stripe_api_key", "")
+
+# Set the Stripe API key to initialize Stripe
+stripe.api_key = stripe_api_key
 
 # Set the page configuration
 st.set_page_config(layout="wide")
 
 # Title for the entire app
 st.title("🎈 Integrated Streamlit App 🎈")
-
-# Initialize Stripe
-stripe.api_key = "stripe_api_key"  # Replace with your Stripe API key
-
-# Stripe OAuth URL
-stripe_oauth_url = "stripe_link"
-
-# Button to initiate Stripe authentication
-if st.button("Login with Stripe"):
-    st.markdown(f"[Click here to login with Stripe]({stripe_oauth_url})")
-
-# Handle Stripe callback
-if st.url_contains("/stripe_callback"):
-    # Extract authorization code from URL
-    authorization_code = st.url_query_params["code"]
-
-    # Exchange authorization code for access token
-    response = stripe.OAuth.token(grant_type="authorization_code", code=authorization_code)
-
-    # Use access token to fetch user information
-    access_token = response["access_token"]
-    user_info = stripe.Account.retrieve(access_token)
-
-    # Display user information
-    st.write("Logged in user:")
-    st.write(user_info)
 
 # Divider
 st.markdown("---")
@@ -77,4 +59,11 @@ if st.button('Search NFIP Data'):
     else:
         st.warning("Please enter a zip code and select at least one column.")
 
+# Handle Stripe callback
+current_url = st.url
+if "/stripe_callback" in current_url:
+    # Extract authorization code from URL
+    authorization_code = st.url_query_params["code"]
 
+    # Use the authorization code to perform further actions for Stripe authentication
+    # Add your Stripe callback handling code here
