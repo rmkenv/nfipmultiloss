@@ -74,3 +74,12 @@ if st.button('Search NFIP Data'):
             st.error("Failed to fetch data from API.")
     else:
         st.warning("Please enter a zip code and select at least one column.")
+
+
+
+# Handle Stripe callback
+current_url = st.url
+if "/stripe_callback" in current_url:
+    # Extract authorization code from URL
+    authorization_code = st.url_query_params["code"]
+
