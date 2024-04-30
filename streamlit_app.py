@@ -4,6 +4,10 @@ import requests
 import plotly.express as px
 import stripe
 
+
+st.write("stripe_link", st.secrets["stripe_link"])
+st.write("stripe_api_key", st.secrets["stripe_api_key"])
+
 # Set the page configuration
 st.set_page_config(layout="wide")
 
