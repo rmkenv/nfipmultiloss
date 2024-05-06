@@ -1,5 +1,5 @@
 streamlit
-st_paywall
+st-paywall
 pandas
 requests
 plotly
