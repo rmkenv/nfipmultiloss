@@ -19,10 +19,11 @@ st.write("The email of the user is " + str(st.session_state.email))
 # Function to extract payer emails from Buy Me a Coffee API response
 def extract_payer_emails(json_response):
     payer_emails = []
-    for item in json_response.get("data", []):  # Check if "data" key exists
-        payer_email = item.get("payer_email")  # Use .get() method to avoid KeyError
-        if payer_email:
-            payer_emails.append(payer_email)
+    if "data" in json_response:
+        for item in json_response["data"]:
+            payer_email = item.get("payer_email")
+            if payer_email:
+                payer_emails.append(payer_email)
     return payer_emails
 
 # Function to get active subscribers from Buy Me a Coffee
