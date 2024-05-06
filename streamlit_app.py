@@ -16,13 +16,24 @@ add_auth(
 st.write("Congrats, you are subscribed!")
 st.write("The email of the user is " + str(st.session_state.email))
 
-# Check if the key exists in the secrets
-if "redirect_url_test" not in st.secrets:
-    st.warning("The key 'redirect_url_test' is not found in the secrets.")
-    # Handle the missing key gracefully, e.g., provide a default value or prompt the user to add it
-else:
-    # Access the secret value if it exists
-    redirect_url_test = st.secrets.get("redirect_url_test", "default_value_if_missing")
+# Function to extract payer emails from Buy Me a Coffee API response
+def extract_payer_emails(json_response):
+    payer_emails = []
+    for item in json_response.get("data", []):  # Check if "data" key exists
+        payer_email = item.get("payer_email")  # Use .get() method to avoid KeyError
+        if payer_email:
+            payer_emails.append(payer_email)
+    return payer_emails
+
+# Function to get active subscribers from Buy Me a Coffee
+def get_bmac_payers():
+    url = "https://buy-me-a-coffee-api-url"  # Replace with the actual Buy Me a Coffee API URL
+    headers = {"Authorization": "Bearer your_api_key"}  # Replace with your API key
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return extract_payer_emails(response.json())  # Extract payer emails from JSON response
+    else:
+        raise Exception("Error fetching active subscriptions.")
 
 # Set the page configuration
 st.set_page_config(layout="wide")
