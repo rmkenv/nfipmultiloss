@@ -4,6 +4,7 @@ import requests
 import plotly.express as px
 from st_paywall import add_auth
 
+# Add authentication
 add_auth(
     required=True,
     login_button_text="Subscriber Access",
@@ -11,8 +12,17 @@ add_auth(
     login_sidebar=True,
 )
 
+# Display subscription info
 st.write("Congrats, you are subscribed!")
-st.write("the email of the user is " + str(st.session_state.email))
+st.write("The email of the user is " + str(st.session_state.email))
+
+# Check if the key exists in the secrets
+if "redirect_url_test" not in st.secrets:
+    st.warning("The key 'redirect_url_test' is not found in the secrets.")
+    # Handle the missing key gracefully, e.g., provide a default value or prompt the user to add it
+else:
+    # Access the secret value if it exists
+    redirect_url_test = st.secrets.get("redirect_url_test", "default_value_if_missing")
 
 # Set the page configuration
 st.set_page_config(layout="wide")
@@ -58,5 +68,3 @@ if st.button('Search NFIP Data'):
             st.error("Failed to fetch data from API.")
     else:
         st.warning("Please enter a zip code and select at least one column.")
-
-
