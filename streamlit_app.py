@@ -2,17 +2,17 @@ import streamlit as st
 import pandas as pd
 import requests
 import plotly.express as px
-import stripe
-import toml
+from st_paywall import add_auth
 
-# Load configuration from secrets TOML file
-secrets_config = toml.load("secrets.toml")
+add_auth(
+    required=True,
+    login_button_text="Subscriber Access",
+    login_button_color="#FD504D",
+    login_sidebar=True,
+)
 
-# Retrieve the Stripe API key from the secrets configuration
-stripe_api_key = secrets_config.get("stripe_api_key", "")
-
-# Set the Stripe API key to initialize Stripe
-stripe.api_key = stripe_api_key
+st.write("Congrats, you are subscribed!")
+st.write("the email of the user is " + str(st.session_state.email))
 
 # Set the page configuration
 st.set_page_config(layout="wide")
@@ -59,11 +59,4 @@ if st.button('Search NFIP Data'):
     else:
         st.warning("Please enter a zip code and select at least one column.")
 
-# Handle Stripe callback
-current_url = st.url
-if "/stripe_callback" in current_url:
-    # Extract authorization code from URL
-    authorization_code = st.url_query_params["code"]
 
-    # Use the authorization code to perform further actions for Stripe authentication
-    # Add your Stripe callback handling code here
