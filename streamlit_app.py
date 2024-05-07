@@ -7,7 +7,7 @@ from st_paywall import add_auth
 # Add authentication
 add_auth(
     required=True,
-    login_button_text="Subscriber Access",
+    login_button_text="Login with Google",
     login_button_color="#FD504D",
     login_sidebar=True,
 )
