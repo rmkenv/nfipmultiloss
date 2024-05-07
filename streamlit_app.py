@@ -16,25 +16,6 @@ add_auth(
 st.write("Congrats, you are subscribed!")
 st.write("The email of the user is " + str(st.session_state.email))
 
-# Function to extract payer emails from Buy Me a Coffee API response
-def extract_payer_emails(json_response):
-    payer_emails = []
-    if "data" in json_response:
-        for item in json_response["data"]:
-            payer_email = item.get("payer_email")
-            if payer_email:
-                payer_emails.append(payer_email)
-    return payer_emails
-
-# Function to get active subscribers from Buy Me a Coffee
-def get_bmac_payers():
-    url = "https://buy-me-a-coffee-api-url"  # Replace with the actual Buy Me a Coffee API URL
-    headers = {"Authorization": "Bearer your_api_key"}  # Replace with your API key
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return extract_payer_emails(response.json())  # Extract payer emails from JSON response
-    else:
-        raise Exception("Error fetching active subscriptions.")
 
 # Set the page configuration
 st.set_page_config(layout="wide")
