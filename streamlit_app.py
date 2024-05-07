@@ -31,6 +31,9 @@ add_auth(
     login_sidebar=True,
 )
 
+# Retrieve client_id from secrets
+client_id = st.secrets["google_auth"]["client_id"]
+
 # Display subscription info and check for access
 if check_payment_status(str(st.session_state.email)):
     st.write("Congrats, you are subscribed!")
