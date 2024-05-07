@@ -4,25 +4,28 @@ import requests
 import plotly.express as px
 from st_paywall import add_auth
 import stripe
-from stripe.api_resources import customer as stripe_customer
+from stripe import Customer  # Updated import
 
 # Safe retrieval of Stripe API key from secrets
-stripe_api_key = st.secrets.get("stripe_api_key_test", "default_test_key")
+stripe_api_key = st.secrets["stripe"].get("secret_key_test", "default_test_key")
 stripe.api_key = stripe_api_key
 
 # Function to check payment status
 def check_payment_status(user_email):
     # Retrieve customer based on email or other identifier
-    customers = stripe_customer.list(email=user_email)
-    if customers.data:
-        customer = customers.data[0]
+    customer = Customer.list(email=user_email)
+    if customer.data:
+        customer_details = customer.data[0]
         # Check subscriptions or payment intents as needed
-        subscriptions = stripe.Subscription.list(customer=customer.id)
+        subscriptions = customer.Subscription.list(customer=customer_details.id)
         if subscriptions.data:
             for subscription in subscriptions.data:
                 if subscription.status == "active":
                     return True
     return False
+
+# Rest of your Streamlit code here
+
 
 # Add authentication
 add_auth(
