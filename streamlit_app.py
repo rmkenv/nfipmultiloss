@@ -24,9 +24,6 @@ def check_payment_status(user_email):
                     return True
     return False
 
-# Rest of your Streamlit code here
-
-
 # Add authentication
 add_auth(
     required=True,
