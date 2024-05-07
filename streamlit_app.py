@@ -33,7 +33,7 @@ add_auth(
 )
 
 # Safe retrieval of client_id from secrets
-client_id = st.secrets.get("google_auth", {}).get("client_id", "default_client_id")
+client_id = st.secrets.get("client_id", "default_client_id")
 
 # Display subscription info and check for access
 if check_payment_status(str(st.session_state.email)):
