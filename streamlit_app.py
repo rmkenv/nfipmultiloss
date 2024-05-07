@@ -6,8 +6,9 @@ from st_paywall import add_auth
 import stripe
 from stripe.api_resources import customer as stripe_customer
 
-# Retrieve Stripe API key from secrets
-stripe.api_key = st.secrets["stripe"]["stripe_api_key_test"]
+# Safe retrieval of Stripe API key from secrets
+stripe_api_key = st.secrets["stripe"].get("stripe_api_key_test", "default_test_key")
+stripe.api_key = stripe_api_key
 
 # Function to check payment status
 def check_payment_status(user_email):
@@ -31,8 +32,8 @@ add_auth(
     login_sidebar=True,
 )
 
-# Retrieve client_id from secrets
-client_id = st.secrets["google_auth"]["client_id"]
+# Safe retrieval of client_id from secrets
+client_id = st.secrets.get("google_auth", {}).get("client_id", "default_client_id")
 
 # Display subscription info and check for access
 if check_payment_status(str(st.session_state.email)):
