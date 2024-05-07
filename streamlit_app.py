@@ -7,7 +7,7 @@ import stripe
 from stripe.api_resources import customer as stripe_customer
 
 # Safe retrieval of Stripe API key from secrets
-stripe_api_key = st.secrets["stripe"].get("stripe_api_key_test", "default_test_key")
+stripe_api_key = st.secrets.get("stripe_api_key_test", "default_test_key")
 stripe.api_key = stripe_api_key
 
 # Function to check payment status
