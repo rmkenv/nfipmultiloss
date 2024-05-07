@@ -3,6 +3,25 @@ import pandas as pd
 import requests
 import plotly.express as px
 from st_paywall import add_auth
+import stripe
+from stripe.api_resources import customer as stripe_customer
+
+# Retrieve Stripe API key from secrets
+stripe.api_key = st.secrets["stripe"]["stripe_api_key_test"]
+
+# Function to check payment status
+def check_payment_status(user_email):
+    # Retrieve customer based on email or other identifier
+    customers = stripe_customer.list(email=user_email)
+    if customers.data:
+        customer = customers.data[0]
+        # Check subscriptions or payment intents as needed
+        subscriptions = stripe.Subscription.list(customer=customer.id)
+        if subscriptions.data:
+            for subscription in subscriptions.data:
+                if subscription.status == "active":
+                    return True
+    return False
 
 # Add authentication
 add_auth(
@@ -12,10 +31,13 @@ add_auth(
     login_sidebar=True,
 )
 
-# Display subscription info
-st.write("Congrats, you are subscribed!")
-st.write("The email of the user is " + str(st.session_state.email))
-
+# Display subscription info and check for access
+if check_payment_status(str(st.session_state.email)):
+    st.write("Congrats, you are subscribed!")
+    st.write("Access granted to premium features.")
+else:
+    st.error("You need a subscription to access this feature.")
+    st.stop()
 
 # Set the page configuration
 st.set_page_config(layout="wide")
